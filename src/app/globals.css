@@ -1,0 +1,80 @@
+@import "tailwindcss";
+
+:root {
+  --navy: #0b1726;
+  --navy-2: #14263a;
+  --cyan: #42c7d9;
+  --blue: #3b82f6;
+  --gold: #c8a96b;
+  --paper: #f7f9fc;
+  --ink: #172536;
+  --muted: #607184;
+  --line: rgba(23, 37, 54, 0.12);
+}
+
+@theme inline {
+  --color-navy: var(--navy);
+  --color-navy-2: var(--navy-2);
+  --color-cyan: var(--cyan);
+  --color-blue: var(--blue);
+  --color-gold: var(--gold);
+  --color-paper: var(--paper);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --font-sans: var(--font-sans-family), ui-sans-serif, system-ui, sans-serif;
+  --font-serif: var(--font-serif-family), "Iowan Old Style", Georgia, serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: #42c7d9;
+  color: #0b1726;
+}
+
+:focus-visible {
+  outline: 2px solid #42c7d9;
+  outline-offset: 3px;
+}
+
+.skip-link {
+  position: absolute;
+  left: 1rem;
+  top: -4rem;
+  z-index: 80;
+  background: #f7f9fc;
+  color: #0b1726;
+  padding: 0.75rem 1rem;
+}
+
+.skip-link:focus {
+  top: 1rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
