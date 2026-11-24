@@ -1,5 +1,3 @@
-import { appendFile, mkdir } from "node:fs/promises";
-import path from "node:path";
 import { inquiryLabel, type ContactInput } from "@/lib/validation/contact";
 
 export type DeliveryMode = "webhook" | "development-log";
@@ -39,6 +37,8 @@ async function sendWebhook(input: ContactInput) {
 }
 
 async function writeDevelopmentLog(input: ContactInput) {
+  const { appendFile, mkdir } = await import("node:fs/promises");
+  const path = await import("node:path");
   const directory = path.join(process.cwd(), ".data");
   await mkdir(directory, { recursive: true });
   await appendFile(

@@ -26,8 +26,10 @@ Without `CONTACT_WEBHOOK_URL`, the form does not send email. In development it w
 | `npm run dev` | Development server |
 | `npm run lint` | ESLint |
 | `npm run typecheck` | TypeScript |
-| `npm run build` | Production build |
-| `npm run start` | Serve the production build |
+| `npm run build` | Next.js build, then the Cloudflare Worker in `.open-next` |
+| `npm run preview` | Build and serve that Worker locally |
+| `npm run deploy` | Build and deploy with Wrangler (needs a Cloudflare login) |
+| `npm run start` | Serve the Next.js production build on Node |
 
 ## Environment variables
 
@@ -50,7 +52,7 @@ The public site URL is `site.url` in `src/config/site.ts`. The default is `https
 
 ## Push to GitHub
 
-This folder is already a git repository. Do not commit secrets (`.env.local`, `.data/`).
+This folder is already a git repository. Commit the source and `package-lock.json`. Do not commit `node_modules`, `.next`, `.open-next`, `.wrangler`, `.env.local`, or `.data/`.
 
 ```bash
 git add .
@@ -60,13 +62,25 @@ gh repo create futuristic-world --private --source=. --remote=origin --push
 
 Without `gh`, create an empty GitHub repository, then `git remote add origin <url>` and `git push -u origin HEAD`.
 
-GitHub stores the source. The contact API needs a Node server such as Vercel. GitHub Pages static hosting does not run `/api/contact`.
+## Cloudflare
 
-## Deploy on Vercel
+Connect the GitHub repository in Cloudflare → Workers → Create → Import a repository. Production branch: `main`.
 
-1. Import the GitHub repository as a Vercel project.
-2. Set `CONTACT_WEBHOOK_URL` in the project environment.
-3. Before attaching `futuristicworld.us`, confirm `site.url` in `src/config/site.ts` matches the live origin.
+The dashboard defaults already match this project:
+
+| Setting | Value |
+| --- | --- |
+| Build command | `npm run build` |
+| Deploy command | `npx wrangler deploy` |
+| Non-production branch command | `npx opennextjs-cloudflare upload` |
+
+`npm run build` runs Next, then writes `.open-next/worker.js`. Wrangler publishes that Worker. Each push to `main` builds and updates the live site.
+
+If a preview branch fails with “worker.js was not found”, set the non-production command to `npx opennextjs-cloudflare upload`.
+
+Set `CONTACT_WEBHOOK_URL` (and `CONTACT_WEBHOOK_TOKEN` if you use it) as a Worker secret. The form returns 503 until that URL exists. It is not stored in git.
+
+The first deploy gets a `*.workers.dev` hostname. Attach `futuristicworld.us` in the Worker settings after that, and keep `site.url` in `src/config/site.ts` equal to the live origin. Node.js version for the build: 22.
 
 ## Not in this version
 
