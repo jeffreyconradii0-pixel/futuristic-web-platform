@@ -52,21 +52,28 @@ The public site URL is `site.url` in `src/config/site.ts`. The default is `https
 
 ## Push to GitHub
 
-This folder is already a git repository. Commit the source and `package-lock.json`. Do not commit `node_modules`, `.next`, `.open-next`, `.wrangler`, `.env.local`, or `.data/`.
+Commit this folder. Leave these out:
+
+- `node_modules/`
+- `.next/`
+- `.open-next/`
+- `.wrangler/`
+- `.data/`
+- `.env.local`
+- `.dev.vars`
+- `open-next.config.ts`
+
+Keep `package.json`, `package-lock.json`, and `wrangler.jsonc`. `package.json` must say `"name": "futuristic-web-platform"`. That is the Worker name in Cloudflare. A copy whose name is still `futuristic-world` fails deploy.
 
 ```bash
 git add .
-git commit -m "Add the Futuristic World marketing site"
-gh repo create futuristic-world --private --source=. --remote=origin --push
+git commit -m "Match the Cloudflare Worker name"
+git push
 ```
-
-Without `gh`, create an empty GitHub repository, then `git remote add origin <url>` and `git push -u origin HEAD`.
 
 ## Cloudflare
 
-The Worker in Cloudflare is `futuristic-web-platform`. `package.json` uses that same name. `npx wrangler deploy` builds the Worker during deploy and the self-reference has to use that name.
-
-Leave the existing deploy command as `npx wrangler deploy`. Production branch: `main`. Do not commit `wrangler.jsonc` or `open-next.config.ts`; the deploy command creates them from the package name. A checked-in config that says `futuristic-world` makes the deploy look for a Worker that is not in the account.
+Leave the deploy command as `npx wrangler deploy`. Production branch: `main`. `wrangler.jsonc` points the Worker at itself as `futuristic-web-platform` and builds before publish.
 
 Set `CONTACT_WEBHOOK_URL` (and `CONTACT_WEBHOOK_TOKEN` if you use it) as a Worker secret. The form returns 503 until that URL exists. It is not stored in git.
 
