@@ -26,7 +26,7 @@ Without `CONTACT_WEBHOOK_URL`, the form does not send email. In development it w
 | `npm run dev` | Development server |
 | `npm run lint` | ESLint |
 | `npm run typecheck` | TypeScript |
-| `npm run build` | Next.js build, then the Cloudflare Worker in `.open-next` |
+| `npm run build` | Next.js production build |
 | `npm run preview` | Build and serve that Worker locally |
 | `npm run deploy` | Build and deploy with Wrangler (needs a Cloudflare login) |
 | `npm run start` | Serve the Next.js production build on Node |
@@ -64,19 +64,9 @@ Without `gh`, create an empty GitHub repository, then `git remote add origin <ur
 
 ## Cloudflare
 
-Connect the GitHub repository in Cloudflare → Workers → Create → Import a repository. Production branch: `main`.
+The Worker in Cloudflare is `futuristic-web-platform`. `package.json` uses that same name. `npx wrangler deploy` builds the Worker during deploy and the self-reference has to use that name.
 
-The dashboard defaults already match this project:
-
-| Setting | Value |
-| --- | --- |
-| Build command | `npm run build` |
-| Deploy command | `npx wrangler deploy` |
-| Non-production branch command | `npx opennextjs-cloudflare upload` |
-
-`npm run build` runs Next, then writes `.open-next/worker.js`. Wrangler publishes that Worker. Each push to `main` builds and updates the live site.
-
-If a preview branch fails with “worker.js was not found”, set the non-production command to `npx opennextjs-cloudflare upload`.
+Leave the existing deploy command as `npx wrangler deploy`. Production branch: `main`. Do not commit `wrangler.jsonc` or `open-next.config.ts`; the deploy command creates them from the package name. A checked-in config that says `futuristic-world` makes the deploy look for a Worker that is not in the account.
 
 Set `CONTACT_WEBHOOK_URL` (and `CONTACT_WEBHOOK_TOKEN` if you use it) as a Worker secret. The form returns 503 until that URL exists. It is not stored in git.
 
