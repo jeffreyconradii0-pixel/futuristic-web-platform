@@ -14,6 +14,7 @@
   "services": [
     {
       "binding": "WORKER_SELF_REFERENCE",
+      // Same name as the Worker in the Cloudflare dashboard.
       "service": "futuristic-web-platform"
     }
   ],
