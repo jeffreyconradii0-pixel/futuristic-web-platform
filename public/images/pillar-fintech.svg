@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" role="img" aria-label="Market analytics visualization">
+  <rect width="800" height="500" fill="#081321"/>
+  <g stroke="#4CC9E8" stroke-opacity="0.25" fill="none">
+    <rect x="120" y="100" width="560" height="300" rx="8"/>
+    <path d="M150 330 L220 260 L290 290 L360 180 L430 220 L500 140 L570 200 L640 160"/>
+  </g>
+  <g fill="#8FCBFF" fill-opacity="0.8">
+    <rect x="150" y="360" width="40" height="8" rx="2"/>
+    <rect x="220" y="340" width="70" height="8" rx="2"/>
+    <rect x="320" y="350" width="55" height="8" rx="2"/>
+  </g>
+</svg>

@@ -1,31 +1,42 @@
 import Link from "next/link";
-import { footerGroups } from "@/config/navigation";
-import { site, unconfirmedFacts } from "@/config/site";
+import { footerGroups, primaryNav } from "@/config/navigation";
+import { site } from "@/config/site";
 import { Wordmark } from "@/components/layout/wordmark";
 
 export function SiteFooter() {
+  const year = new Date().getFullYear();
+
   return (
-    <footer className="bg-navy text-paper">
-      <div className="grid w-full gap-12 px-6 py-20 sm:px-10 lg:grid-cols-[1.6fr_1fr_1fr_1fr] lg:px-16">
+    <footer className="surface-dark border-t border-line text-paper">
+      <div className="grid w-full gap-12 px-6 py-20 sm:px-10 lg:grid-cols-[1.5fr_repeat(3,1fr)] lg:px-16">
         <div>
           <Wordmark />
-          <p className="mt-6 max-w-sm text-sm leading-6 text-paper/75">{site.companyDescription}</p>
-          <dl className="mt-6 space-y-2 text-sm text-paper/70">
-            {unconfirmedFacts.slice(0, 3).map((fact) => (
-              <div key={fact.label} className="grid grid-cols-[8.5rem_1fr] gap-3">
-                <dt>{fact.label}</dt>
-                <dd>{fact.value}</dd>
-              </div>
-            ))}
-          </dl>
+          <p className="mt-6 max-w-md text-sm leading-7 text-paper/75">{site.companyDescription}</p>
+          <p className="mt-6 text-sm text-paper/70">
+            <a href={`mailto:${site.contactEmail}`} className="hover:text-ice-blue">
+              {site.contactEmail}
+            </a>
+          </p>
+          <p className="mt-2 text-sm text-paper/70">
+            <a
+              href={site.githubUrl}
+              className="hover:text-ice-blue"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              GitHub organization
+            </a>
+          </p>
         </div>
         {footerGroups.map((group) => (
           <nav key={group.title} aria-label={group.title}>
-            <p className="text-xs tracking-[0.18em] text-gold">{group.title.toUpperCase()}</p>
+            <p className="text-xs font-semibold tracking-[0.18em] text-cyan-accent">
+              {group.title.toUpperCase()}
+            </p>
             <ul className="mt-4 space-y-3 text-sm">
               {group.links.map((link) => (
                 <li key={link.href}>
-                  <Link href={link.href} className="text-paper/80 hover:text-paper">
+                  <Link href={link.href} className="text-paper/80 transition hover:text-paper">
                     {link.label}
                   </Link>
                 </li>
@@ -34,9 +45,20 @@ export function SiteFooter() {
           </nav>
         ))}
       </div>
-      <div className="border-t border-white/10">
-        <div className="w-full px-6 py-8 sm:px-10 lg:px-16">
-          <p className="max-w-4xl text-xs leading-5 text-paper/60">{site.disclaimer}</p>
+      <div className="border-t border-line">
+        <div className="flex w-full flex-col gap-6 px-6 py-8 sm:px-10 lg:flex-row lg:items-start lg:justify-between lg:px-16">
+          <p className="max-w-3xl text-xs leading-6 text-paper/60">{site.disclaimer}</p>
+          <p className="text-xs text-paper/50">
+            © {year} {site.name}. Explore:{" "}
+            {primaryNav.map((item, index) => (
+              <span key={item.href}>
+                <Link href={item.href} className="hover:text-paper/80">
+                  {item.label}
+                </Link>
+                {index < primaryNav.length - 1 ? " · " : null}
+              </span>
+            ))}
+          </p>
         </div>
       </div>
     </footer>

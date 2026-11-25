@@ -1,88 +1,77 @@
 # Futuristic World
 
-Public marketing site for Futuristic World. It explains digital-asset and tokenization technology and collects inquiries. It does not issue tokens, connect wallets, or trade assets.
+Corporate marketing site for [Futuristic World](https://futuristicworld.us) — blockchain, AI, and financial technology. Built from the **Website Development Specification 2026** (Next.js App Router, TypeScript, Tailwind CSS).
 
-Unconfirmed legal names, addresses, emails, customers, licenses, audits, and partners are not invented. Those fields stay `Not yet published`.
+## Local development
 
-## Run locally
-
-Node.js 22 or newer.
+Node.js 22+.
 
 ```bash
+cd E:\Work\1125
 npm install
 npm run dev
 ```
 
 Open http://localhost:3000.
 
-`node_modules` and `.next` are not part of the project you upload. They are recreated by `npm install` and `npm run build`. Do not commit or zip them.
+## Quality checks
 
-Without `CONTACT_WEBHOOK_URL`, the form does not send email. In development it writes `.data/contact-submissions.jsonl` and says so on screen. `.data/` is not committed.
+```bash
+npm run lint
+npm run typecheck
+npm run build
+```
 
-## Scripts
+## Push to GitHub (auto-deploy)
 
-| Command | Purpose |
-| --- | --- |
-| `npm run dev` | Development server |
-| `npm run lint` | ESLint |
-| `npm run typecheck` | TypeScript |
-| `npm run build` | Next.js production build |
-| `npm run preview` | Build and serve that Worker locally |
-| `npm run deploy` | Build and deploy with Wrangler (needs a Cloudflare login) |
-| `npm run start` | Serve the Next.js production build on Node |
+After you connect this folder to your GitHub repo and CI/hosting:
 
-## Environment variables
+```bash
+git status
+git add .
+git commit -m "Rebuild Futuristic World corporate website"
+git push origin main
+```
 
-Copy `.env.example` to `.env.local`.
+Do **not** commit: `node_modules/`, `.next/`, `.env.local`, `.data/`, secrets.
+
+## Environment
+
+Copy `.env.example` → `.env.local`.
 
 | Variable | Purpose |
 | --- | --- |
-| `CONTACT_WEBHOOK_URL` | HTTPS endpoint that receives inquiry JSON. If it is empty in production, the form stores nothing and returns 503. |
-| `CONTACT_WEBHOOK_TOKEN` | Optional. Sent as `Authorization: Bearer …` when set. |
-
-The public site URL is `site.url` in `src/config/site.ts`. The default is `https://futuristicworld.us`.
+| `CONTACT_WEBHOOK_URL` | HTTPS endpoint for contact form JSON |
+| `CONTACT_WEBHOOK_TOKEN` | Optional bearer token |
 
 ## Edit content
 
-- Shared copy and the disclaimer: `src/config/site.ts`
-- Navigation: `src/config/navigation.ts`
-- Home and service copy: `src/content/pages.ts`
-- Articles: add an entry in `src/content/insights.ts`. It appears at `/insights/[slug]` and in the sitemap.
-- Public projects: `publicProjects` in `src/app/(marketing)/projects/page.tsx`. An empty list shows “Projects in development.” Add only confirmed projects.
+| Area | Location |
+| --- | --- |
+| Company copy | `src/config/site.ts` |
+| Navigation | `src/config/navigation.ts` |
+| Pillars & process | `src/content/pillars.ts` |
+| Products | `src/content/products.ts` |
+| Projects (verification flags) | `src/content/projects.ts` |
+| Technology lists | `src/content/technology.ts` |
+| Insights articles | `src/content/insights.ts` |
+| Images | `public/images/` (see `ASSETS.md`) |
 
-## Push to GitHub
+Unverified projects use `approvedForPublication: false` so they never appear publicly.
 
-Commit this folder. Leave these out:
+## Stack
 
-- `node_modules/`
-- `.next/`
-- `.open-next/`
-- `.wrangler/`
-- `.data/`
-- `.env.local`
-- `.dev.vars`
-- `open-next.config.ts`
+- Next.js 16 + React 19 + TypeScript
+- Tailwind CSS 4
+- Lucide icons
+- Optional Cloudflare deploy via `@opennextjs/cloudflare` (see `wrangler.jsonc`)
 
-Keep `package.json`, `package-lock.json`, and `wrangler.jsonc`. `package.json` must say `"name": "futuristic-web-platform"`. That is the Worker name in Cloudflare. A copy whose name is still `futuristic-world` fails deploy.
+## Deployment
+
+If you use Cloudflare Workers as in the copied template:
 
 ```bash
-git add .
-git commit -m "Match the Cloudflare Worker name"
-git push
+npm run deploy
 ```
 
-## Cloudflare
-
-Leave the deploy command as `npx wrangler deploy`. Production branch: `main`. `wrangler.jsonc` points the Worker at itself as `futuristic-web-platform` and builds before publish.
-
-Set `CONTACT_WEBHOOK_URL` (and `CONTACT_WEBHOOK_TOKEN` if you use it) as a Worker secret. The form returns 503 until that URL exists. It is not stored in git.
-
-The first deploy gets a `*.workers.dev` hostname. Attach `futuristicworld.us` in the Worker settings after that, and keep `site.url` in `src/config/site.ts` equal to the live origin. Node.js version for the build: 22.
-
-## Not in this version
-
-Wallet connection, token deployment, trading, custody, payments, investment solicitation, and a Korean `/ko` locale. Pages are split under the App Router so those can be added later.
-
-## Still unpublished
-
-Legal entity, address, official email, social accounts, team biographies, public projects, and the privacy controller and retention period. Do not fill those with sample values until they are confirmed.
+Set `CONTACT_WEBHOOK_URL` as a Worker secret in production.

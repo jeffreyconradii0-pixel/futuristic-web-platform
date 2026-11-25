@@ -1,12 +1,12 @@
 import { ContactForm } from "@/components/contact/contact-form";
+import { Container } from "@/components/ui/container";
 import { FactList, PageIntro } from "@/components/ui/section";
-import { unconfirmedFacts } from "@/config/site";
+import { companyFacts, site } from "@/config/site";
 import { createMetadata } from "@/lib/seo";
 
 export const metadata = createMetadata({
   title: "Contact",
-  description:
-    "Send a business inquiry, tokenization consultation, or technical partnership note to Futuristic World.",
+  description: "Send a business inquiry or technical partnership note to Futuristic World.",
   path: "/contact",
 });
 
@@ -15,23 +15,23 @@ export default function ContactPage() {
     <>
       <PageIntro
         eyebrow="Contact"
-        title="Discuss a project."
-        lede="Use this form for a business inquiry, a tokenization consultation, or a technical partnership. It is not an investment channel."
+        title="Discuss a project"
+        lede="Business inquiries, engineering partnerships, or product collaborations. Not an investment or token-sales channel."
       />
-      <div className="grid w-full gap-10 px-6 py-20 sm:px-10 lg:grid-cols-[1.15fr_0.85fr] lg:px-16">
+      <Container className="grid gap-10 py-16 lg:grid-cols-[1.15fr_0.85fr] lg:py-20">
         <ContactForm />
         <aside className="space-y-8">
-          <div>
-            <h2 className="font-serif text-2xl text-navy">What happens next</h2>
+          <div className="surface-panel rounded-lg p-6">
+            <h2 className="text-xl font-semibold text-ink">Direct email</h2>
             <p className="mt-3 text-sm leading-7 text-muted">
-              In production, messages go to the webhook configured with CONTACT_WEBHOOK_URL. In local development,
-              without that variable, they are written to a gitignored file on the machine running the site. The form
-              tells you which of those happened.
+              <a href={`mailto:${site.contactEmail}`} className="font-semibold text-deep-blue hover:underline">
+                {site.contactEmail}
+              </a>
             </p>
           </div>
-          <FactList facts={unconfirmedFacts} />
+          <FactList facts={companyFacts} />
         </aside>
-      </div>
+      </Container>
     </>
   );
 }

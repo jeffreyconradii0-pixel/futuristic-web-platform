@@ -1,55 +1,33 @@
-import Link from "next/link";
+import { ProjectCard } from "@/components/marketing/project-card";
+import { Container } from "@/components/ui/container";
 import { PageIntro } from "@/components/ui/section";
+import { publishedProjects } from "@/content/projects";
 import { createMetadata } from "@/lib/seo";
 
-export const publicProjects: readonly {
-  name: string;
-  summary: string;
-  href?: string;
-}[] = [];
-
 export const metadata = createMetadata({
-  title: "Projects",
+  title: "Projects & Achievements",
   description:
-    "Public Futuristic World initiatives. Projects are listed only after they are confirmed. Current status: in development.",
+    "Evidence-based case studies and labeled prototypes from Futuristic World. Unverified draft entries remain unpublished.",
   path: "/projects",
 });
 
 export default function ProjectsPage() {
+  const items = publishedProjects();
+
   return (
     <>
       <PageIntro
         eyebrow="Projects"
-        title="Projects in development."
-        lede="This page lists only public initiatives that can be described from confirmed information. No project meets that standard yet."
+        title="Work we can show with context"
+        lede="Every public case study includes relationship, scope, status, and outcomes we can demonstrate. Draft templates with unverified third-party names stay out of this list."
       />
-      <div className="w-full px-6 py-20 sm:px-10 lg:px-16">
-        {publicProjects.length === 0 ? (
-          <div className="border border-ink/10 bg-white p-6 sm:p-8">
-            <p className="text-xs font-semibold tracking-[0.18em] text-gold">STATUS</p>
-            <h2 className="mt-3 font-serif text-3xl text-navy">Nothing is published here yet</h2>
-            <p className="mt-4 max-w-2xl text-sm leading-7 text-muted">
-              A card will appear when a project name, a factual summary, and a public reference are ready to stand on
-              their own. Until then, the honest status is in development.
-            </p>
-            <Link
-              href="/contact"
-              className="mt-6 inline-block text-sm font-semibold text-navy underline decoration-cyan underline-offset-4"
-            >
-              Discuss an initiative
-            </Link>
-          </div>
-        ) : (
-          <ul className="grid gap-4">
-            {publicProjects.map((project) => (
-              <li key={project.name} className="border border-ink/10 bg-white p-6">
-                <h2 className="font-serif text-2xl text-navy">{project.name}</h2>
-                <p className="mt-3 text-sm leading-7 text-muted">{project.summary}</p>
-              </li>
-            ))}
-          </ul>
-        )}
-      </div>
+      <Container className="py-16 sm:py-20">
+        <div className="grid gap-6">
+          {items.map((project) => (
+            <ProjectCard key={project.slug} project={project} />
+          ))}
+        </div>
+      </Container>
     </>
   );
 }

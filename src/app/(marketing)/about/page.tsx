@@ -1,5 +1,7 @@
-import { PageIntro, FactList } from "@/components/ui/section";
-import { site, unconfirmedFacts } from "@/config/site";
+import { CTASection } from "@/components/marketing/cta-section";
+import { Container } from "@/components/ui/container";
+import { FactList, PageIntro } from "@/components/ui/section";
+import { companyFacts, companyPrinciples, site } from "@/config/site";
 import { createMetadata } from "@/lib/seo";
 
 export const metadata = createMetadata({
@@ -11,31 +13,37 @@ export const metadata = createMetadata({
 export default function AboutPage() {
   return (
     <>
-      <PageIntro
-        eyebrow="About"
-        title="A technology company, described only as far as the record goes."
-        lede={site.companyDescription}
-      />
-      <div className="grid w-full gap-12 px-6 py-20 sm:px-10 lg:grid-cols-[1.2fr_0.8fr] lg:px-16">
-        <div className="space-y-5 text-base leading-8 text-ink">
-          <p>
-            The positioning is digital assets and blockchain technologies. The work is infrastructure and
-            tokenization technology for businesses and emerging projects. Where a fact is not confirmed — a
-            license, an audit, a customer, an office — it is left unpublished.
-          </p>
-          <p>{site.servicesDescription}</p>
-          <p>
-            Leadership biographies, a founding date, and a headcount are not on this page because they have
-            not been supplied as verified public facts. They can be added in the content files when they are.
-          </p>
+      <PageIntro eyebrow="About" title="Technology company. Clear boundaries." lede={site.companyDescription} />
+      <Container className="grid gap-16 py-16 lg:grid-cols-[1.2fr_0.8fr] lg:py-20">
+        <div className="space-y-8">
+          <section>
+            <h2 className="text-2xl font-semibold text-ink">Mission</h2>
+            <p className="mt-3 text-base leading-8 text-muted">{site.mission}</p>
+          </section>
+          <section>
+            <h2 className="text-2xl font-semibold text-ink">Vision</h2>
+            <p className="mt-3 text-base leading-8 text-muted">{site.vision}</p>
+          </section>
+          <section>
+            <h2 className="text-2xl font-semibold text-ink">Operating principles</h2>
+            <ul className="mt-6 grid gap-4">
+              {companyPrinciples.map((principle) => (
+                <li key={principle.title} className="surface-panel rounded-lg p-6">
+                  <h3 className="text-lg font-semibold text-ink">{principle.title}</h3>
+                  <p className="mt-2 text-sm leading-7 text-muted">{principle.text}</p>
+                </li>
+              ))}
+            </ul>
+          </section>
         </div>
         <aside>
-          <h2 className="font-serif text-2xl text-navy">Published company facts</h2>
+          <h2 className="text-2xl font-semibold text-ink">Company facts</h2>
           <div className="mt-4">
-            <FactList facts={unconfirmedFacts} />
+            <FactList facts={companyFacts} />
           </div>
         </aside>
-      </div>
+      </Container>
+      <CTASection />
     </>
   );
 }

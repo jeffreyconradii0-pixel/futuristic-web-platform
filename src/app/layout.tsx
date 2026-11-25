@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Newsreader } from "next/font/google";
+import { Geist } from "next/font/google";
 import { Suspense } from "react";
 import { SiteFooter } from "@/components/layout/site-footer";
 import { SiteHeader } from "@/components/layout/site-header";
@@ -12,16 +12,10 @@ const sans = Geist({
   variable: "--font-sans-family",
 });
 
-const serif = Newsreader({
-  subsets: ["latin"],
-  variable: "--font-serif-family",
-  style: ["normal", "italic"],
-});
-
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
   title: {
-    default: `${site.name} · ${site.positioning}`,
+    default: `${site.name} · ${site.tagline}`,
     template: `%s · ${site.name}`,
   },
   description: site.description,
@@ -40,10 +34,11 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     name: site.name,
     url: site.url,
     description: site.companyDescription,
+    email: site.contactEmail,
   };
 
   return (
-    <html lang="en" data-scroll-behavior="smooth" className={`${sans.variable} ${serif.variable} h-full`}>
+    <html lang="en" data-scroll-behavior="smooth" className={`${sans.variable} h-full`}>
       <body className="flex min-h-full flex-col antialiased">
         <a href="#content" className="skip-link">
           Skip to content

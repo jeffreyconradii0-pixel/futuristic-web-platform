@@ -1,214 +1,201 @@
-import Image from "next/image";
 import Link from "next/link";
-import { Boxes, FileCode2, Layers, Waypoints } from "lucide-react";
+import { ArrowRight } from "lucide-react";
+import { HeroNetwork } from "@/components/marketing/hero-network";
+import { CapabilityCard } from "@/components/marketing/capability-card";
+import { ProductCard } from "@/components/marketing/product-card";
+import { ProjectCard } from "@/components/marketing/project-card";
+import { CTASection } from "@/components/marketing/cta-section";
+import { ButtonLink } from "@/components/ui/button";
+import { Container } from "@/components/ui/container";
+import { SectionHeading } from "@/components/ui/section";
+import { heroHighlights, credibilitySignals } from "@/content/pages";
+import { pillars, processSteps } from "@/content/pillars";
+import { products } from "@/content/products";
+import { publishedProjects } from "@/content/projects";
+import { technologyGroups } from "@/content/technology";
 import { insights } from "@/content/insights";
-import { capabilities, heroPlates, processSteps, tracks } from "@/content/pages";
 import { createMetadata } from "@/lib/seo";
 import { site } from "@/config/site";
 
 export const metadata = createMetadata({
-  title: site.positioning,
+  title: site.tagline,
   description: site.description,
   path: "/",
 });
 
-const icons = {
-  layers: Layers,
-  contracts: FileCode2,
-  network: Waypoints,
-  infrastructure: Boxes,
-} as const;
-
 export default function HomePage() {
+  const featuredProjects = publishedProjects().slice(0, 2);
+
   return (
     <>
-      <section className="relative -mt-20 min-h-svh text-paper">
-        <Image
-          src="/images/hero-hall.jpg"
-          alt="A dark marble hall with gold veining and a single shaft of light"
-          fill
-          priority
-          sizes="100vw"
-          className="object-cover object-center"
-        />
-        <div className="absolute inset-0 bg-gradient-to-r from-navy/80 via-navy/35 to-transparent" />
-        <div className="absolute inset-0 bg-gradient-to-t from-navy/80 via-transparent to-navy/30" />
-        <div className="pointer-events-none absolute inset-4 border border-gold/50 sm:inset-6 lg:inset-8" />
-        <div className="pointer-events-none absolute left-4 top-4 h-10 w-10 border-l-2 border-t-2 border-gold sm:left-6 sm:top-6 lg:left-8 lg:top-8" />
-        <div className="pointer-events-none absolute right-4 top-4 h-10 w-10 border-r-2 border-t-2 border-gold sm:right-6 sm:top-6 lg:right-8 lg:top-8" />
-        <div className="pointer-events-none absolute bottom-4 left-4 h-10 w-10 border-b-2 border-l-2 border-gold sm:bottom-6 sm:left-6 lg:bottom-8 lg:left-8" />
-        <div className="pointer-events-none absolute bottom-4 right-4 h-10 w-10 border-b-2 border-r-2 border-gold sm:bottom-6 sm:right-6 lg:bottom-8 lg:right-8" />
-        <div className="relative flex min-h-svh w-full flex-col justify-end px-6 pb-12 pt-28 sm:px-10 lg:px-16 lg:pb-16">
-          <p className="text-xs font-semibold tracking-[0.28em] text-cyan">
-            {site.positioning.toUpperCase()}
-          </p>
-          <h1 className="mt-5 max-w-6xl font-serif text-5xl leading-[0.98] tracking-tight sm:text-7xl lg:text-8xl">
-            {site.tagline}
+      <section className="relative -mt-20 min-h-svh overflow-hidden text-paper">
+        <HeroNetwork />
+        <Container className="relative flex min-h-svh flex-col justify-center pb-16 pt-28 lg:pt-32">
+          <p className="text-xs font-semibold tracking-[0.28em] text-cyan-accent">FUTURISTIC WORLD</p>
+          <h1 className="mt-5 max-w-4xl text-5xl font-semibold leading-[1.02] tracking-tight sm:text-6xl lg:text-7xl">
+            <span className="text-gradient-hero">{site.tagline}</span>
           </h1>
-          <p className="mt-6 max-w-3xl text-lg leading-8 text-paper/90 sm:text-xl">
-            We develop digital asset and blockchain technology solutions that help businesses and
-            emerging projects explore, build, and manage tokenization initiatives.
+          <p className="mt-6 max-w-2xl text-lg leading-8 text-paper/85 sm:text-xl">
+            {site.description}
           </p>
-          <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-            <Link href="/contact" className="bg-cyan px-6 py-3.5 text-center text-sm font-semibold text-navy">
+          <div className="mt-9 flex flex-col gap-3 sm:flex-row">
+            <ButtonLink href="/solutions">Explore Our Capabilities</ButtonLink>
+            <ButtonLink href="/contact" variant="secondary">
               Discuss a Project
-            </Link>
-            <Link
-              href="/technology"
-              className="border border-white/40 bg-navy/30 px-6 py-3.5 text-center text-sm font-semibold text-paper backdrop-blur-sm"
-            >
-              Explore Our Technology
-            </Link>
+            </ButtonLink>
           </div>
-          <ul className="mt-12 grid border border-white/15 sm:grid-cols-3">
-            {heroPlates.map((item) => (
-              <li key={item.label} className="border-b border-white/10 px-4 py-4 last:border-b-0 sm:border-b-0 sm:border-r sm:last:border-r-0">
-                <p className="text-sm font-semibold text-cyan">{item.label}</p>
-                <p className="mt-1 text-sm leading-6 text-paper/75">{item.text}</p>
+          <ul className="mt-14 grid gap-4 border-t border-line pt-8 sm:grid-cols-3">
+            {heroHighlights.map((item) => (
+              <li key={item.label} className="border-line sm:border-r sm:pr-6 last:sm:border-r-0">
+                <p className="text-sm font-semibold text-ice-blue">{item.label}</p>
+                <p className="mt-2 text-sm leading-6 text-paper/75">{item.text}</p>
               </li>
             ))}
           </ul>
-        </div>
+        </Container>
       </section>
 
-      <section className="bg-white">
-        <div className="grid lg:grid-cols-2">
-          <div className="relative min-h-[28rem] lg:min-h-[40rem]">
-            <Image
-              src="/images/glass-sculpture.jpg"
-              alt="Abstract sculpture of glass planes and brushed metal on a navy plinth"
-              fill
-              sizes="(min-width: 1024px) 42vw, 100vw"
-              className="object-cover"
-            />
-          </div>
-          <div className="flex flex-col justify-center px-5 py-14 sm:px-10 lg:px-16">
-            <p className="text-xs font-semibold tracking-[0.22em] text-blue">CAPABILITIES</p>
-            <h2 className="mt-3 max-w-xl font-serif text-4xl tracking-tight text-navy sm:text-6xl">
-              Technology work, stated narrowly
-            </h2>
-            <ul className="mt-10 divide-y divide-ink/10">
-              {capabilities.map((item) => {
-                const Icon = icons[item.icon];
-                return (
-                  <li key={item.title} className="grid grid-cols-[auto_1fr] gap-4 py-5">
-                    <Icon aria-hidden="true" className="mt-1 h-5 w-5 text-navy" />
-                    <div>
-                      <h3 className="font-serif text-2xl text-navy">{item.title}</h3>
-                      <p className="mt-2 text-sm leading-7 text-muted">{item.text}</p>
-                    </div>
-                  </li>
-                );
-              })}
-            </ul>
-          </div>
-        </div>
-      </section>
-
-      <section className="relative text-paper">
-        <Image
-          src="/images/night-towers.jpg"
-          alt="Glass towers across a river at dusk"
-          fill
-          sizes="100vw"
-          className="object-cover"
-        />
-        <div className="absolute inset-0 bg-navy/60" />
-        <div className="relative w-full px-6 py-24 sm:px-10 sm:py-28 lg:px-16">
-          <p className="text-xs font-semibold tracking-[0.22em] text-gold">THE WORK</p>
-          <h2 className="mt-3 max-w-3xl font-serif text-5xl tracking-tight sm:text-6xl">
-            Three separate tracks
-          </h2>
-          <div className="mt-12 grid gap-4 lg:grid-cols-3">
-            {tracks.map((track) => (
-              <article key={track.title} className="flex flex-col border border-white/15 bg-navy/55 p-6 backdrop-blur-md">
-                <p className="text-xs tracking-[0.18em] text-gold">{track.index}</p>
-                <h3 className="mt-4 font-serif text-2xl">{track.title}</h3>
-                <p className="mt-3 flex-1 text-sm leading-7 text-paper/75">{track.text}</p>
-                <Link
-                  href={track.href}
-                  className="mt-6 text-sm font-semibold text-cyan underline decoration-cyan/40 underline-offset-4"
-                >
-                  {track.link}
-                </Link>
-              </article>
+      <section className="bg-cool-gray py-20 sm:py-24">
+        <Container>
+          <SectionHeading
+            eyebrow="Capabilities"
+            title="Three pillars. One engineering standard."
+            text="We organize our work around blockchain infrastructure, applied AI, and financial technology—each with clear boundaries and measurable outcomes."
+          />
+          <div className="mt-12 grid gap-6 lg:grid-cols-3">
+            {pillars.map((pillar) => (
+              <CapabilityCard
+                key={pillar.slug}
+                title={pillar.title}
+                summary={pillar.summary}
+                href={pillar.href}
+                image={pillar.image}
+                imageAlt={pillar.imageAlt}
+              />
             ))}
           </div>
-        </div>
+        </Container>
       </section>
 
-      <section className="grid w-full gap-10 px-6 py-20 sm:px-10 sm:py-28 lg:grid-cols-[minmax(18rem,28rem)_1fr] lg:px-16">
-        <div className="relative h-80 lg:h-auto">
-          <Image
-            src="/images/stone-lattice.jpg"
-            alt="Dark stone screen with cyan light behind it"
-            fill
-            sizes="(min-width: 1024px) 18rem, 100vw"
-            className="object-cover"
+      <section className="surface-dark py-20 text-paper sm:py-24">
+        <Container>
+          <SectionHeading
+            light
+            eyebrow="Featured work"
+            title="Prototypes and research with honest labels"
+            text="We publish case studies only when relationship, scope, and status are clear. Featured items below are verified internal work—not third-party achievement claims."
           />
-        </div>
-        <div>
-          <h2 className="font-serif text-5xl tracking-tight text-navy sm:text-6xl">How an engagement proceeds</h2>
-          <ol className="mt-8 divide-y divide-ink/10 border-y border-ink/10">
+          <div className="mt-12 grid gap-6">
+            {featuredProjects.map((project) => (
+              <ProjectCard key={project.slug} project={project} />
+            ))}
+          </div>
+          <ButtonLink href="/projects" variant="secondary" className="mt-10">
+            View all projects
+          </ButtonLink>
+        </Container>
+      </section>
+
+      <section className="bg-cool-gray py-20 sm:py-24">
+        <Container>
+          <SectionHeading
+            eyebrow="Products"
+            title="Tools we are building in the open"
+            text="Each product card includes status, audience, and capabilities. Demos and repositories are linked when available."
+          />
+          <div className="mt-12 grid gap-6 lg:grid-cols-3">
+            {products.map((product) => (
+              <ProductCard key={product.slug} product={product} />
+            ))}
+          </div>
+        </Container>
+      </section>
+
+      <section className="border-y border-line bg-paper py-20 sm:py-24">
+        <Container>
+          <SectionHeading
+            eyebrow="Process"
+            title="How we work"
+            text="A straightforward delivery rhythm that keeps discovery, validation, and improvement visible to stakeholders."
+          />
+          <ol className="mt-12 grid gap-4 md:grid-cols-5">
             {processSteps.map((step) => (
-              <li key={step.step} className="grid gap-2 py-5 sm:grid-cols-[4.5rem_12rem_1fr] sm:items-baseline sm:gap-6">
-                <span className="font-serif text-2xl text-gold">{step.step}</span>
-                <h3 className="text-lg text-navy">{step.title}</h3>
-                <p className="text-sm leading-7 text-muted">{step.text}</p>
+              <li key={step.step} className="rounded-lg border border-line bg-cool-gray p-5">
+                <p className="text-xs font-semibold tracking-[0.2em] text-deep-blue">{step.step}</p>
+                <h3 className="mt-3 text-lg font-semibold text-ink">{step.title}</h3>
+                <p className="mt-2 text-sm leading-6 text-muted">{step.text}</p>
               </li>
             ))}
           </ol>
-        </div>
+        </Container>
       </section>
 
-      <section className="border-t border-ink/10 bg-white">
-        <div className="w-full px-6 py-20 sm:px-10 sm:py-24 lg:px-16">
-          <div className="flex items-end justify-between gap-6">
-            <h2 className="font-serif text-5xl tracking-tight text-navy sm:text-6xl">Notes</h2>
-            <Link href="/insights" className="text-sm font-semibold text-navy underline decoration-cyan underline-offset-4">
-              All notes
-            </Link>
+      <section className="surface-dark py-20 text-paper sm:py-24">
+        <Container>
+          <SectionHeading
+            light
+            eyebrow="Technology"
+            title="Stacks we ship with discipline"
+            text="We list tools the team uses in production engagements—not every logo we have ever touched."
+          />
+          <div className="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            {technologyGroups.map((group) => (
+              <article key={group.title} className="rounded-lg border border-line bg-deep-blue/40 p-6">
+                <h3 className="text-base font-semibold text-ice-blue">{group.title}</h3>
+                <ul className="mt-4 flex flex-wrap gap-2">
+                  {group.items.map((item) => (
+                    <li
+                      key={item}
+                      className="rounded-md border border-line bg-midnight/50 px-2.5 py-1 text-xs text-paper/80"
+                    >
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+              </article>
+            ))}
           </div>
-          <ul className="mt-8 divide-y divide-ink/10 border-y border-ink/10">
-            {insights.map((article) => (
-              <li key={article.slug}>
-                <Link href={`/insights/${article.slug}`} className="grid gap-2 py-6 sm:grid-cols-[8rem_1fr]">
-                  <time dateTime={article.published} className="text-sm text-muted">
-                    {article.published}
-                  </time>
-                  <span>
-                    <span className="block font-serif text-2xl text-navy">{article.title}</span>
-                    <span className="mt-2 block text-sm leading-6 text-muted">{article.description}</span>
-                  </span>
-                </Link>
+          <ButtonLink href="/technology" variant="tertiary" className="mt-8">
+            Technology practices
+          </ButtonLink>
+        </Container>
+      </section>
+
+      <section className="bg-cool-gray py-20 sm:py-24">
+        <Container className="grid gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:items-start">
+          <SectionHeading
+            eyebrow="Credibility"
+            title="Evidence, publishing, and restraint"
+            text="We would rather show working systems than imply partnerships we cannot substantiate."
+          />
+          <ul className="space-y-5">
+            {credibilitySignals.map((item) => (
+              <li key={item.title} className="surface-panel rounded-lg p-6">
+                <h3 className="text-lg font-semibold text-ink">{item.title}</h3>
+                <p className="mt-2 text-sm leading-7 text-muted">{item.text}</p>
               </li>
             ))}
+            <li className="surface-panel rounded-lg p-6">
+              <h3 className="text-lg font-semibold text-ink">Latest insights</h3>
+              <ul className="mt-4 space-y-3">
+                {insights.slice(0, 3).map((article) => (
+                  <li key={article.slug}>
+                    <Link
+                      href={`/insights/${article.slug}`}
+                      className="group inline-flex items-center gap-2 text-sm font-medium text-deep-blue hover:text-ink"
+                    >
+                      {article.title}
+                      <ArrowRight className="h-4 w-4 transition group-hover:translate-x-0.5" aria-hidden="true" />
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </li>
           </ul>
-        </div>
+        </Container>
       </section>
 
-      <section className="relative text-paper">
-        <Image
-          src="/images/hero-hall.jpg"
-          alt=""
-          fill
-          sizes="100vw"
-          className="object-cover object-bottom"
-        />
-        <div className="absolute inset-0 bg-navy/75" />
-        <div className="relative flex w-full flex-col gap-8 px-6 py-24 sm:px-10 lg:flex-row lg:items-center lg:justify-between lg:px-16">
-          <div>
-            <h2 className="font-serif text-5xl sm:text-6xl">Discuss a project</h2>
-            <p className="mt-4 max-w-xl text-sm leading-7 text-paper/80">
-              Tell us what you are trying to build. If an official inbox is not connected yet, the form says so
-              instead of pretending the message was emailed.
-            </p>
-          </div>
-          <Link href="/contact" className="bg-cyan px-6 py-3.5 text-center text-sm font-semibold text-navy">
-            Contact Us
-          </Link>
-        </div>
-      </section>
+      <CTASection />
     </>
   );
 }

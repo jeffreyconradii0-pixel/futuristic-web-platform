@@ -3,6 +3,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { Button } from "@/components/ui/button";
 import {
   contactSchema,
   inquiryOptions,
@@ -209,13 +210,9 @@ export function ContactForm() {
             {formError}
           </p>
         ) : null}
-        <button
-          type="submit"
-          disabled={isSubmitting}
-          className="bg-navy px-5 py-3 text-sm font-semibold text-paper hover:bg-navy-2 disabled:cursor-wait disabled:opacity-70"
-        >
+        <Button type="submit" loading={isSubmitting} disabled={isSubmitting} className="w-full sm:w-auto">
           {isSubmitting ? "Sending" : "Send inquiry"}
-        </button>
+        </Button>
       </div>
     </form>
   );

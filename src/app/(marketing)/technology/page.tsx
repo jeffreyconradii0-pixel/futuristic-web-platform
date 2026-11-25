@@ -1,12 +1,14 @@
-import Link from "next/link";
+import { CTASection } from "@/components/marketing/cta-section";
+import { ButtonLink } from "@/components/ui/button";
+import { Container } from "@/components/ui/container";
 import { PageIntro } from "@/components/ui/section";
-import { capabilities } from "@/content/pages";
+import { engineeringPractices, technologyGroups } from "@/content/technology";
 import { createMetadata } from "@/lib/seo";
 
 export const metadata = createMetadata({
   title: "Technology",
   description:
-    "How Futuristic World approaches tokenization systems, smart contracts, multi-chain architecture, and product infrastructure.",
+    "Engineering capabilities across blockchain, AI, web applications, financial data tooling, and cloud operations at Futuristic World.",
   path: "/technology",
 });
 
@@ -15,34 +17,40 @@ export default function TechnologyPage() {
     <>
       <PageIntro
         eyebrow="Technology"
-        title="Architecture and implementation, without a fake control panel."
-        lede="The technology practice covers the design, build, and test of digital-asset systems. This page describes that practice. It is not a dashboard, and it does not show live network data."
+        title="Stacks, practices, and security posture"
+        lede="We document what we actually build with. Certifications and third-party audits are listed only when they exist."
       />
-      <div className="w-full space-y-12 px-6 py-20 sm:px-10 lg:px-16">
-        <div className="grid gap-6 md:grid-cols-2">
-          {capabilities.map((item) => (
-            <article key={item.title} className="border border-ink/10 bg-white p-6">
-              <h2 className="font-serif text-2xl text-navy">{item.title}</h2>
-              <p className="mt-3 text-sm leading-7 text-muted">{item.text}</p>
+      <Container className="space-y-16 py-16 lg:py-20">
+        <section className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+          {technologyGroups.map((group) => (
+            <article key={group.title} className="surface-panel rounded-lg p-6">
+              <h2 className="text-lg font-semibold text-ink">{group.title}</h2>
+              <ul className="mt-4 flex flex-wrap gap-2">
+                {group.items.map((item) => (
+                  <li key={item} className="rounded-md border border-line bg-cool-gray px-2.5 py-1 text-xs text-muted">
+                    {item}
+                  </li>
+                ))}
+              </ul>
             </article>
           ))}
-        </div>
-        <section className="max-w-3xl space-y-4 text-base leading-8">
-          <h2 className="font-serif text-3xl text-navy">How testing is described</h2>
-          <p>
-            Work we build is tested against the behavior written in the scope. That is an internal engineering
-            practice. It is not a statement that a system has been audited, certified, or reviewed by a regulator.
-          </p>
-          <p>
-            A later product can sit behind this website. The current codebase keeps marketing pages, content, and the
-            inquiry endpoint separate so a token factory or customer portal can be added without turning this release
-            into one.
-          </p>
-          <Link href="/contact" className="inline-block text-sm font-semibold text-navy underline decoration-cyan underline-offset-4">
-            Talk about a technical scope
-          </Link>
         </section>
-      </div>
+        <section>
+          <h2 className="text-3xl font-semibold text-ink">Engineering process</h2>
+          <div className="mt-8 grid gap-4 md:grid-cols-2">
+            {engineeringPractices.map((practice) => (
+              <article key={practice.title} className="rounded-lg border border-line bg-paper p-6">
+                <h3 className="text-lg font-semibold text-ink">{practice.title}</h3>
+                <p className="mt-3 text-sm leading-7 text-muted">{practice.text}</p>
+              </article>
+            ))}
+          </div>
+          <ButtonLink href="/contact" className="mt-8">
+            Talk about a technical scope
+          </ButtonLink>
+        </section>
+      </Container>
+      <CTASection />
     </>
   );
 }

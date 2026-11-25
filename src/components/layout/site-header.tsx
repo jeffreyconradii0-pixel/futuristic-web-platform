@@ -1,11 +1,12 @@
 "use client";
 
-import { Menu, X } from "lucide-react";
+import { ChevronDown, Menu, X } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useId, useRef, useState } from "react";
-import { primaryNav } from "@/config/navigation";
+import { companyNav, primaryNav } from "@/config/navigation";
 import { Wordmark } from "@/components/layout/wordmark";
+import { ButtonLink } from "@/components/ui/button";
 
 function isActive(pathname: string, href: string) {
   return pathname === href || pathname.startsWith(`${href}/`);
@@ -13,36 +14,35 @@ function isActive(pathname: string, href: string) {
 
 export function SiteHeader() {
   const pathname = usePathname();
-  const [openPath, setOpenPath] = useState<string | null>(null);
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const [companyOpen, setCompanyOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const open = openPath === pathname;
-  const overlay = pathname === "/" && !scrolled && !open;
   const panelRef = useRef<HTMLDivElement>(null);
+  const companyRef = useRef<HTMLDivElement>(null);
   const menuId = useId();
+  const companyMenuId = useId();
+  const compact = scrolled || pathname !== "/";
 
   useEffect(() => {
     function onScroll() {
-      setScrolled(window.scrollY > 12);
+      setScrolled(window.scrollY > 16);
     }
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
   useEffect(() => {
-    if (!open) {
+    if (!mobileOpen) {
       return;
     }
-
     const panel = panelRef.current;
     const previouslyFocused = document.activeElement as HTMLElement | null;
-    const items = panel
-      ? [...panel.querySelectorAll<HTMLElement>("a, button")]
-      : [];
+    const items = panel ? [...panel.querySelectorAll<HTMLElement>("a, button")] : [];
     items[0]?.focus();
 
     function onKey(event: KeyboardEvent) {
       if (event.key === "Escape") {
-        setOpenPath(null);
+        setMobileOpen(false);
         return;
       }
       if (event.key !== "Tab" || items.length === 0) {
@@ -68,74 +68,117 @@ export function SiteHeader() {
       document.body.style.overflow = previousOverflow;
       previouslyFocused?.focus();
     };
-  }, [open]);
+  }, [mobileOpen]);
+
+  useEffect(() => {
+    function onPointer(event: MouseEvent) {
+      if (!companyRef.current?.contains(event.target as Node)) {
+        setCompanyOpen(false);
+      }
+    }
+    document.addEventListener("pointerdown", onPointer);
+    return () => document.removeEventListener("pointerdown", onPointer);
+  }, []);
 
   return (
     <header
-      className={`fixed inset-x-0 top-0 z-40 text-paper ${
-        overlay
-          ? "border-b border-transparent bg-gradient-to-b from-navy/80 to-transparent"
-          : "border-b border-white/10 bg-navy/95 backdrop-blur-md"
-      }`}
+      className={`fixed inset-x-0 top-0 z-50 border-b transition-all duration-300 ${
+        compact
+          ? "border-line bg-midnight/95 py-0 backdrop-blur-md"
+          : "border-transparent bg-gradient-to-b from-midnight/90 to-transparent py-1"
+      } text-paper`}
     >
-      <div className="flex h-20 w-full items-center justify-between gap-6 px-6 sm:px-10 lg:px-16">
+      <div
+        className={`flex w-full items-center justify-between gap-6 px-6 transition-all sm:px-10 lg:px-16 ${
+          compact ? "h-16" : "h-20"
+        }`}
+      >
         <Wordmark />
-        <nav aria-label="Primary" className="hidden items-center gap-6 lg:flex">
+        <nav aria-label="Primary" className="hidden items-center gap-8 lg:flex">
           {primaryNav.map((item) => (
             <Link
               key={item.href}
               href={item.href}
               aria-current={isActive(pathname, item.href) ? "page" : undefined}
-              className={`text-sm tracking-wide ${
-                isActive(pathname, item.href) ? "text-cyan" : "text-paper/80 hover:text-paper"
+              className={`text-sm font-medium tracking-wide transition ${
+                isActive(pathname, item.href) ? "text-ice-blue" : "text-paper/80 hover:text-paper"
               }`}
             >
               {item.label}
             </Link>
           ))}
+          <div ref={companyRef} className="relative">
+            <button
+              type="button"
+              className="inline-flex items-center gap-1.5 text-sm font-medium text-paper/80 transition hover:text-paper"
+              aria-expanded={companyOpen}
+              aria-controls={companyMenuId}
+              onClick={() => setCompanyOpen((open) => !open)}
+            >
+              Company
+              <ChevronDown className={`h-4 w-4 transition ${companyOpen ? "rotate-180" : ""}`} aria-hidden="true" />
+            </button>
+            {companyOpen ? (
+              <div
+                id={companyMenuId}
+                role="menu"
+                className="absolute right-0 mt-3 w-56 rounded-lg border border-line bg-deep-blue p-2 shadow-[var(--shadow-elevated)]"
+              >
+                {companyNav.map((item) => (
+                  <Link
+                    key={item.href}
+                    role="menuitem"
+                    href={item.href}
+                    className="block rounded-md px-3 py-2.5 text-sm text-paper/85 hover:bg-midnight hover:text-paper"
+                    onClick={() => setCompanyOpen(false)}
+                  >
+                    {item.label}
+                  </Link>
+                ))}
+              </div>
+            ) : null}
+          </div>
         </nav>
         <div className="flex items-center gap-3">
-          <Link
-            href="/contact"
-            className="hidden bg-cyan px-4 py-2 text-sm font-semibold text-navy hover:bg-white sm:inline-flex"
-          >
-            Contact Us
-          </Link>
+          <ButtonLink href="/contact" variant="primary" className="hidden sm:inline-flex">
+            Contact
+          </ButtonLink>
           <button
             type="button"
-            className="inline-flex h-11 w-11 items-center justify-center border border-white/20 lg:hidden"
-            aria-expanded={open}
+            className="inline-flex h-11 w-11 items-center justify-center rounded-md border border-line text-paper lg:hidden"
+            aria-expanded={mobileOpen}
             aria-controls={menuId}
-            onClick={() => setOpenPath(open ? null : pathname)}
+            onClick={() => setMobileOpen((open) => !open)}
           >
-            {open ? <X aria-hidden="true" /> : <Menu aria-hidden="true" />}
-            <span className="sr-only">{open ? "Close menu" : "Open menu"}</span>
+            {mobileOpen ? <X aria-hidden="true" /> : <Menu aria-hidden="true" />}
+            <span className="sr-only">{mobileOpen ? "Close menu" : "Open menu"}</span>
           </button>
         </div>
       </div>
-      {open ? (
+      {mobileOpen ? (
         <div
           ref={panelRef}
           id={menuId}
           role="dialog"
           aria-modal="true"
-          aria-label="Primary"
-          className="fixed inset-0 top-20 z-40 bg-navy px-6 py-8 lg:hidden"
+          aria-label="Mobile navigation"
+          className="fixed inset-0 top-16 z-40 overflow-y-auto bg-midnight px-6 py-8 lg:hidden"
         >
           <nav className="flex flex-col gap-1">
-            {primaryNav.map((item) => (
+            {[...primaryNav, ...companyNav].map((item) => (
               <Link
                 key={item.href}
                 href={item.href}
                 aria-current={isActive(pathname, item.href) ? "page" : undefined}
-                className="border-b border-white/10 py-4 text-lg"
+                className="border-b border-line py-4 text-lg font-medium"
+                onClick={() => setMobileOpen(false)}
               >
                 {item.label}
               </Link>
             ))}
-            <Link href="/contact" className="mt-6 bg-cyan px-4 py-3 text-center font-semibold text-navy">
+            <ButtonLink href="/contact" className="mt-6 w-full" onClick={() => setMobileOpen(false)}>
               Discuss a Project
-            </Link>
+            </ButtonLink>
           </nav>
         </div>
       ) : null}
